@@ -1,0 +1,8 @@
+CPMAddPackage(
+	NAME GodotCpp
+	GITHUB_REPOSITORY godotengine/godot-cpp
+	GIT_TAG 3.3
+	VERSION 3.3
+	OPTIONS
+		"GODOT_CUSTOM_API_FILE ${CMAKE_CURRENT_SOURCE_DIR}/godot.json"
+)
