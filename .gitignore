@@ -15,5 +15,6 @@ data_*/
 
 # ECMAScript compiled files
 node_modules/
-*.js[x]
+*.jsx
+*.js
 *.map
