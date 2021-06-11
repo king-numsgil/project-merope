@@ -55300,9 +55300,6 @@ declare module godot {
 		/**  */
 		mass: number;
 
-		/**  */
-		weight: number;
-
 		/** Getter of `engine_force` property */
 		get_engine_force() : number;
 
@@ -55326,12 +55323,6 @@ declare module godot {
 
 		/** Setter of `mass` property */
 		set_mass(p_value: number) : void;
-
-		/** Getter of `weight` property */
-		get_weight() : number;
-
-		/** Setter of `weight` property */
-		set_weight(p_value: number) : void;
 	}
 	namespace VehicleBody {
 	}
@@ -63637,7 +63628,9 @@ declare module godot {
 	}
 
 	/** Graph-based generator for smooth voxel worlds.
-	 Generates SDF voxel data from a graph of operations.
+	 Generates SDF voxel data from a graph of per-voxel operations.
+
+	 The graph must be created, compiled, and only then blocks can be generated.
 
 	 Warning: methods to modify the graph should only be called from the main thread. */
 	class VoxelGeneratorGraph extends VoxelGenerator {
@@ -63660,17 +63653,21 @@ declare module godot {
 		/**  */
 		debug_block_clipping: boolean;
 
-		/**  */
+		/** Erases all nodes and connections from the graph. */
 		clear() : void;
 
-		/**  */
+		/** Creates a graph node of a given type at a specific visual position. That position does not affect how the graph will perform, however it helps organizing nodes.
+
+		 An optional ID can be specified. If left to 0, the ID will be generated.
+
+		 This function then returns the ID of the node, which may be useful to modify other properties of the node later. */
 		//@ts-ignore
 		create_node(type_id: VoxelGeneratorGraph.NodeTypeID, position: Vector2, id: number = 0) : number;
 
 		/**  */
 		remove_node(node_id: number) : void;
 
-		/**  */
+		/** Tests if two ports can be connected together. */
 		can_connect(src_node_id: number, src_port_index: number, dst_node_id: number, dst_port_index: number) : boolean;
 
 		/**  */
@@ -63712,7 +63709,27 @@ declare module godot {
 		/**  */
 		set_node_gui_position(node_id: number, position: Vector2) : void;
 
-		/**  */
+		/** Compiles the graph so it can be used to generate blocks.
+
+		 If it succeeds, the returned result is a dictionary with the following layout:
+
+		 ```gdscript
+		 {
+		 	"success": true
+		 }
+		 ```
+
+		 If it fails, the returned result may contain a message and the ID of a graph node that could be the cause:
+
+		 ```gdscript
+		 {
+		 	"success": false,
+		 	"node_id": int,
+		 	"message": String
+		 }
+		 ```
+
+		 The node ID will be -1 if the error is not about a particular node. */
 		compile() : object;
 
 		/**  */
